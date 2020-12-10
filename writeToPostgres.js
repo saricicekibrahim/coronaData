@@ -29,10 +29,14 @@ let insertPostgres = (_path) => {
                     result.push(new Date(key));
                     result.push(row[key]);
                     resultArr.push(result);
-                    pool.query(
-                        "insert into confirmed (province, region, day, value, geom) select $1, $2, $3, $4, st_setsrid(st_makepoint(" + result[3] + "," + result[2] + "),4326)",
-                        [result[0], result[1], result[4], result[5]]
-                    );
+                    try {
+                        pool.query(
+                            "insert into confirmed (province, region, day, value, geom) select $1, $2, $3, $4, st_setsrid(st_makepoint(" + result[3] + "," + result[2] + "),4326)",
+                            [result[0], result[1], result[4], result[5]]
+                        )
+                    } catch (error) {
+                        
+                    }
                     result = [];
                 }
             });
